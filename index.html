@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>Typing RTA + スペイン語活用</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      text-align: center;
+    }
+
+    #text-display {
+      font-size: 2rem;
+      margin: 20px 0;
+    }
+
+    #input {
+      width: 100%;
+      font-size: 1.2rem;
+      padding: 10px;
+    }
+
+    #status {
+      margin-bottom: 20px;
+      font-size: 1.2rem;
+    }
+
+    #result, #conj-result {
+      font-size: 1.3rem;
+      margin-top: 20px;
+    }
+
+    .success {
+      color: green;
+    }
+
+    .error {
+      color: red;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 1rem;
+      margin: 10px;
+      cursor: pointer;
+    }
+
+    table {
+      margin: 0 auto;
+      border-collapse: collapse;
+      font-size: 1.2rem;
+    }
+
+    td, th {
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+    }
+
+    input[name] {
+      font-size: 1.1rem;
+      padding: 5px;
+      width: 150px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Typing RTA + スペイン語活用</h1>
+  <p>モードを選択してスタートしてください。</p>
+
+  <select id="mode-select">
+    <option value="typing">単語タイピング</option>
+    <option value="conjugation">スペイン語活用</option>
+  </select>
+
+  <button id="start-btn">▶ スタート</button>
+
+    <!-- Typing Mode -->
+    <div id="typing-section" class="mode-section">
+      <div id="status">
+        <span id="timer">⏱ 0.00s</span>
+        <span id="progress">📊 0 / 10</span>
+        <span id="wpm">💨 0 WPM</span>
+      </div>
+      <div id="text-display">Press Start to begin!</div>
+      <input type="text" id="input" autocomplete="off" disabled placeholder="Type the word above..." />
+      <p id="result"></p>
+    </div>
+
+    <!-- Conjugation Mode -->
+    <div id="conj-section" class="mode-section" style="display:none;">
+      <h2 id="conj-verb">Select a verb to conjugate</h2>
+      <h3 id="conj-tense"></h3>
+      <form id="conj-form">
+        <!-- Dynamic table will be inserted here -->
+      </form>
+      <p id="conj-result"></p>
+    </div>
+  </div>
+
+  <script>
+    // Sample word data for typing practice
+    const WORDS = [
+      "javascript", "python", "react", "computer", "programming", 
+      "keyboard", "monitor", "software", "hardware", "algorithm",
+      "database", "network", "function", "variable", "boolean",
+      "string", "number", "object", "array", "method"
+    ];
+
+    // Sample conjugation data
+    const CONJUGATIONS = [
+      {
+        verb: "hablar (to speak)",
+        answers: {
+          "Present": {
+            "yo": "hablo",
+            "tú": "hablas", 
+            "él/ella": "habla"
+          },
+          "Preterite": {
+            "yo": "hablé",
+            "tú": "hablaste",
+            "él/ella": "habló"
+          }
+        }
+      },
+      {
+        verb: "comer (to eat)",
+        answers: {
+          "Present": {
+            "yo": "como",
+            "tú": "comes",
+            "él/ella": "come"
+          },
+          "Preterite": {
+            "yo": "comí",
+            "tú": "comiste", 
+            "él/ella": "comió"
+          }
+        }
+      },
+      {
+        verb: "vivir (to live)",
+        answers: {
+          "Present": {
+            "yo": "vivo",
+            "tú": "vives",
+            "él/ella": "vive"
+          },
+          "Preterite": {
+            "yo": "viví",
+            "tú": "viviste",
+            "él/ella": "vivió"
+          }
+        }
+      }
+    ];
+
+    // DOM elements
+    const modeSelect = document.getElementById("mode-select");
+    const startBtn = document.getElementById("start-btn");
+    const typingSection = document.getElementById("typing-section");
+    const conjSection = document.getElementById("conj-section");
+    const textDisplay = document.getElementById("text-display");
+    const input = document.getElementById("input");
+    const timer = document.getElementById("timer");
+    const progress = document.getElementById("progress");
+    const wpmDisplay = document.getElementById("wpm");
+    const result = document.getElementById("result");
+    const conjVerb = document.getElementById("conj-verb");
+    const conjTense = document.getElementById("conj-tense");
+    const conjForm = document.getElementById("conj-form");
+    const conjResult = document.getElementById("conj-result");
+
+    // Global state
+    let currentMode = "typing";
+    let gameState = {
+      wordList: [],
+      currentIndex: 0,
+      startTime: null,
+      timerInterval: null,
+      totalWords: 10,
+      correctWords: 0
+    };
+
+    // Mode switching
+    modeSelect.addEventListener("change", (e) => {
+      currentMode = e.target.value;
+      switchMode();
+    });
+
+    function switchMode() {
+      // Hide all sections
+      typingSection.style.display = "none";
+      conjSection.style.display = "none";
+      
+      // Show selected section
+      if (currentMode === "typing") {
+        typingSection.style.display = "block";
+        resetTypingMode();
+      } else if (currentMode === "conjugation") {
+        conjSection.style.display = "block";
+        resetConjugationMode();
+      }
+    }
+
+    // Start button
+    startBtn.addEventListener("click", () => {
+      if (currentMode === "typing") {
+        startTyping();
+      } else if (currentMode === "conjugation") {
+        startConjugation();
+      }
+    });
+
+    // TYPING MODE
+    function resetTypingMode() {
+      textDisplay.textContent = "Press Start to begin!";
+      input.value = "";
+      input.disabled = true;
+      result.textContent = "";
+      timer.textContent = "⏱ 0.00s";
+      progress.textContent = "📊 0 / 10";
+      wpmDisplay.textContent = "💨 0 WPM";
+    }
+
+    function startTyping() {
+      // Reset state
+      gameState = {
+        wordList: shuffleArray([...WORDS]).slice(0, 10),
+        currentIndex: 0,
+        startTime: Date.now(),
+        timerInterval: null,
+        totalWords: 10,
+        correctWords: 0
+      };
+
+      input.disabled = false;
+      input.focus();
+      result.textContent = "";
+
+      displayCurrentWord();
+      startTimer();
+      updateProgress();
+
+      input.addEventListener("input", handleTypingInput);
+      input.addEventListener("keydown", handleTypingKeydown);
+    }
+
+    function displayCurrentWord() {
+      if (gameState.currentIndex < gameState.wordList.length) {
+        textDisplay.textContent = gameState.wordList[gameState.currentIndex];
+      }
+    }
+
+    function handleTypingInput(e) {
+      const currentWord = gameState.wordList[gameState.currentIndex];
+      const typed = e.target.value.trim();
+
+      if (typed === currentWord) {
+        gameState.correctWords++;
+        gameState.currentIndex++;
+        input.value = "";
+
+        if (gameState.currentIndex >= gameState.totalWords) {
+          finishTyping();
+        } else {
+          displayCurrentWord();
+          updateProgress();
+        }
+      }
+    }
+
+    function handleTypingKeydown(e) {
+      if (e.key === "Enter") {
+        const currentWord = gameState.wordList[gameState.currentIndex];
+        const typed = input.value.trim();
+        
+        if (typed !== currentWord) {
+          // Show error briefly
+          textDisplay.style.color = "red";
+          setTimeout(() => {
+            textDisplay.style.color = "black";
+          }, 200);
+        }
+      }
+    }
+
+    function startTimer() {
+      gameState.timerInterval = setInterval(() => {
+        const elapsed = (Date.now() - gameState.startTime) / 1000;
+        timer.textContent = `⏱ ${elapsed.toFixed(2)}s`;
+        
+        // Calculate WPM
+        const wordsTyped = gameState.correctWords;
+        const minutes = elapsed / 60;
+        const wpm = minutes > 0 ? Math.round(wordsTyped / minutes) : 0;
+        wpmDisplay.textContent = `💨 ${wpm} WPM`;
+      }, 100);
+    }
+
+    function updateProgress() {
+      progress.textContent = `📊 ${gameState.currentIndex} / ${gameState.totalWords}`;
+    }
+
+    function finishTyping() {
+      clearInterval(gameState.timerInterval);
+      const totalTime = (Date.now() - gameState.startTime) / 1000;
+      const wpm = Math.round((gameState.correctWords / (totalTime / 60)));
+      
+      input.disabled = true;
+      textDisplay.textContent = "🎉 Complete!";
+      result.innerHTML = `
+        <div class="success">
+          ✅ Time: ${totalTime.toFixed(2)}s<br>
+          🚀 Speed: ${wpm} WPM<br>
+          🎯 Accuracy: ${Math.round((gameState.correctWords / gameState.totalWords) * 100)}%
+        </div>
+      `;
+
+      // Remove event listeners
+      input.removeEventListener("input", handleTypingInput);
+      input.removeEventListener("keydown", handleTypingKeydown);
+    }
+
+    // CONJUGATION MODE
+    function resetConjugationMode() {
+      conjVerb.textContent = "Select a verb to conjugate";
+      conjTense.textContent = "";
+      conjForm.innerHTML = "";
+      conjResult.textContent = "";
+    }
+
+    function startConjugation() {
+      const item = CONJUGATIONS[Math.floor(Math.random() * CONJUGATIONS.length)];
+      const { verb, answers } = item;
+
+      conjVerb.textContent = verb;
+      conjTense.textContent = "";
+      conjResult.textContent = "";
+      conjForm.innerHTML = "";
+
+      // Get column names (tenses)
+      const colNames = Object.keys(answers);
+      if (colNames.length === 0) {
+        conjResult.textContent = "❌ Error: No conjugation data";
+        return;
+      }
+
+      // Get row names (persons) from first column
+      const rowNames = Object.keys(answers[colNames[0]]);
+
+      // Create table
+      const table = document.createElement("table");
+
+      // Header row
+      const thead = document.createElement("thead");
+      const headerRow = document.createElement("tr");
+      const emptyTh = document.createElement("th");
+      emptyTh.textContent = "Person";
+      headerRow.appendChild(emptyTh);
+      
+      colNames.forEach(colName => {
+        const th = document.createElement("th");
+        th.textContent = colName;
+        headerRow.appendChild(th);
+      });
+      thead.appendChild(headerRow);
+      table.appendChild(thead);
+
+      // Body rows
+      const tbody = document.createElement("tbody");
+      rowNames.forEach(rowName => {
+        const tr = document.createElement("tr");
+        
+        // Row name cell
+        const tdRowName = document.createElement("td");
+        tdRowName.textContent = rowName;
+        tdRowName.style.fontWeight = "600";
+        tr.appendChild(tdRowName);
+
+        // Input cells
+        colNames.forEach(colName => {
+          const td = document.createElement("td");
+          const inputEl = document.createElement("input");
+          inputEl.name = `${rowName}_${colName}`;
+          inputEl.autocomplete = "off";
+          inputEl.placeholder = "...";
+          td.appendChild(inputEl);
+          tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+      });
+      table.appendChild(tbody);
+      conjForm.appendChild(table);
+
+      // Submit button
+      const submitBtn = document.createElement("button");
+      submitBtn.type = "submit";
+      submitBtn.textContent = "✔ Check Answers";
+      submitBtn.style.marginTop = "20px";
+      conjForm.appendChild(submitBtn);
+
+      // Focus first input
+      const firstInput = conjForm.querySelector("input");
+      if (firstInput) firstInput.focus();
+
+      // Enter key navigation
+      const inputs = conjForm.querySelectorAll('input[name]');
+      inputs.forEach((inputEl, i) => {
+        inputEl.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            if (i + 1 < inputs.length) {
+              inputs[i + 1].focus();
+            } else {
+              conjForm.requestSubmit();
+            }
+          }
+        });
+      });
+
+      // Submit handler
+      conjForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const formData = new FormData(conjForm);
+        let correct = 0;
+        let total = 0;
+        let errors = [];
+
+        rowNames.forEach(rowName => {
+          colNames.forEach(colName => {
+            const key = `${rowName}_${colName}`;
+            const correctAnswer = answers[colName][rowName].toLowerCase();
+            const userInput = (formData.get(key) || "").trim().toLowerCase();
+            total++;
+            
+            if (userInput === correctAnswer) {
+              correct++;
+            } else {
+              errors.push(`${rowName} ${colName}: "${correctAnswer}"`);
+            }
+          });
+        });
+
+        if (correct === total) {
+          conjResult.innerHTML = '<div class="success">🎉 Perfect! All answers correct!</div>';
+        } else {
+          conjResult.innerHTML = `
+            <div class="error">
+              ❌ ${total - correct} error(s)<br>
+              <small>Corrections: ${errors.slice(0, 3).join(", ")}${errors.length > 3 ? "..." : ""}</small>
+            </div>
+          `;
+        }
+      });
+    }
+
+    // Utility functions
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    // Initialize
+    switchMode();
+  </script>
+</body>
+</html>
