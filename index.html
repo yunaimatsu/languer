@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <title>Typing RTA + スペイン語活用</title>
+  <title>Languer</title>
   <style>
     body {
       font-family: sans-serif;
@@ -11,54 +11,44 @@
       padding: 20px;
       text-align: center;
     }
-
     #text-display {
       font-size: 2rem;
       margin: 20px 0;
     }
-
     #input {
       width: 100%;
       font-size: 1.2rem;
       padding: 10px;
     }
-
     #status {
       margin-bottom: 20px;
       font-size: 1.2rem;
     }
-
     #result, #conj-result {
       font-size: 1.3rem;
       margin-top: 20px;
     }
-
     .success {
       color: green;
     }
-
     .error {
       color: red;
     }
-
     button {
       padding: 10px 20px;
       font-size: 1rem;
       margin: 10px;
       cursor: pointer;
     }
-
     table {
       margin: 0 auto;
       border-collapse: collapse;
       font-size: 1.2rem;
     }
-
     td, th {
       padding: 8px 12px;
       border: 1px solid #ccc;
     }
-
     input[name] {
       font-size: 1.1rem;
       padding: 5px;
@@ -67,16 +57,13 @@
   </style>
 </head>
 <body>
-  <h1>Typing RTA + スペイン語活用</h1>
-  <p>モードを選択してスタートしてください。</p>
-
+  <h1>Languer</h1>
+  <p>Select mode</p>
   <select id="mode-select">
-    <option value="typing">単語タイピング</option>
-    <option value="conjugation">スペイン語活用</option>
+    <option value="typing">Vocabulary</option>
+    <option value="conjugation">Conjugation</option>
   </select>
-
-  <button id="start-btn">▶ スタート</button>
-
+  <button id="start-btn">▶ Start</button>
     <!-- Typing Mode -->
     <div id="typing-section" class="mode-section">
       <div id="status">
