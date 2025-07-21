@@ -3,62 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <title>Languer</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      max-width: 600px;
-      margin: 50px auto;
-      padding: 20px;
-      text-align: center;
-    }
-    #text-display {
-      font-size: 2rem;
-      margin: 20px 0;
-    }
-    #input {
-      width: 100%;
-      font-size: 1.2rem;
-      padding: 10px;
-    }
-    #status {
-      margin-bottom: 20px;
-      font-size: 1.2rem;
-    }
-    #result, #conj-result {
-      font-size: 1.3rem;
-      margin-top: 20px;
-    }
-    .success {
-      color: green;
-    }
-    .error {
-      color: red;
-    }
-    button {
-      padding: 10px 20px;
-      font-size: 1rem;
-      margin: 10px;
-      cursor: pointer;
-    }
-    table {
-      margin: 0 auto;
-      border-collapse: collapse;
-      font-size: 1.2rem;
-    }
-    td, th {
-      padding: 8px 12px;
-      border: 1px solid #ccc;
-    }
-    input[name] {
-      font-size: 1.1rem;
-      padding: 5px;
-      width: 150px;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Languer</h1>
-  <p>Select mode</p>
   <select id="mode-select">
     <option value="typing">Vocabulary</option>
     <option value="conjugation">Conjugation</option>
@@ -88,83 +35,19 @@
   </div>
 
   <script>
-    // Sample word data for typing practice
-    const WORDS = [
-      "javascript", "python", "react", "computer", "programming", 
-      "keyboard", "monitor", "software", "hardware", "algorithm",
-      "database", "network", "function", "variable", "boolean",
-      "string", "number", "object", "array", "method"
-    ];
+    let WORDS = [];
+    let CONJUGATIONS = [];
+    async function loadData() {
+      const [wordsRes, conjRes] = await Promise.all([
+        fetch('words.json'),
+        fetch('conjugations.json')
+      ]);
 
-    // Sample conjugation data
-    const CONJUGATIONS = [
-      {
-        verb: "hablar (to speak)",
-        answers: {
-          "Present": {
-            "yo": "hablo",
-            "tú": "hablas", 
-            "él/ella": "habla"
-          },
-          "Preterite": {
-            "yo": "hablé",
-            "tú": "hablaste",
-            "él/ella": "habló"
-          }
-        }
-      },
-      {
-        verb: "conocer",
-        answers: {
-          "Present": {
-            "yo": "conozco",
-            "tú": "conoces", 
-            "él/ella": "conoce",
-            "nosotros": "conocemos",
-            "vosotros": "conocéis",
-            "ellos/ellas": "conocen"
-          },
-          "Preterite": {
-            "yo": "conocé",
-            "tú": "conociste",
-            "él/ella": "conoció",
-            "nosotros": "conocimos",
-            "vosotros": "conocisteis",
-            "ellos/ellas": "conocieron"
-          }
-        }
-      },
-      {
-        verb: "comer (to eat)",
-        answers: {
-          "Present": {
-            "yo": "como",
-            "tú": "comes",
-            "él/ella": "come"
-          },
-          "Preterite": {
-            "yo": "comí",
-            "tú": "comiste", 
-            "él/ella": "comió"
-          }
-        }
-      },
-      {
-        verb: "vivir (to live)",
-        answers: {
-          "Present": {
-            "yo": "vivo",
-            "tú": "vives",
-            "él/ella": "vive"
-          },
-          "Preterite": {
-            "yo": "viví",
-            "tú": "viviste",
-            "él/ella": "vivió"
-          }
-        }
-      }
-    ];
+      WORDS = await wordsRes.json();
+      CONJUGATIONS = await conjRes.json();
+    }
+    window.addEventListener("DOMContentLoaded", loadData);
+
 
     // DOM elements
     const modeSelect = document.getElementById("mode-select");
