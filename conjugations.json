@@ -1,78 +1,22 @@
 [
   {
-    "verb": "食べる (to eat)",
-    "answers": {
-      "Present": {
-        "未然形": "たべない",
-        "連用形": "たべて", 
-        "終止形": "habla",
-        "連体形": "habla",
-        "仮定形": "habla",
-        "命令形": "habla"
-      },
-      "Preterite": {
-        "yo": "hablé",
-        "tú": "hablaste",
-        "él/ella": "habló",
-        "連体形": "habla",
-        "仮定形": "habla",
-        "命令形": "habla"
-      }
-    }
-  },
-  {
-    "verb": "먹다meog-da (to eat)",
-    "answers": {
-      "Stem": {
-        "1(-고)": "먹고",
-        "2(-면/으면)": "먹으면",
-        "3(-요)": "먹어요"
-      }
-    }
-  },
-  {
-    "verb": "하다ha-da (to do)",
-    "answers": {
-      "Stem": {
-        "1(-고)": "하고",
-        "2(-면/으면)": "하면",
-        "3(-요)": "해요"
-      }
-    }
-  },
-  {
     "verb": "hablar (to speak)",
     "answers": {
       "Present": {
         "yo": "hablo",
         "tú": "hablas", 
-        "él/ella": "habla"
+        "él/ella": "habla",
+        "nosotros": "hablamos",
+        "vosotros": "habláis",
+        "ellos/ellas": "hablan"
       },
       "Preterite": {
         "yo": "hablé",
         "tú": "hablaste",
-        "él/ella": "habló"
-      }
-    }
-  },
-  {
-    "verb": "conocer",
-    "answers": {
-      "Present": {
-        "yo": "conozco",
-        "tú": "conoces", 
-        "él/ella": "conoce",
-        "nosotros": "conocemos",
-        "vosotros": "conocéis",
-        "ellos/ellas": "conocen"
-      },
-      "Preterite": {
-        "yo": "conocé",
-        "tú": "conociste",
-        "él/ella": "conoció",
-        "nosotros": "conocimos",
-        "vosotros": "conocisteis",
-        "ellos/ellas": "conocieron"
+        "él/ella": "habló",
+        "nosotros": "hablamos",
+        "vosotros": "hablasteis",
+        "ellos/ellas": "hablaron"
       }
     }
   },
@@ -82,12 +26,18 @@
       "Present": {
         "yo": "como",
         "tú": "comes",
-        "él/ella": "come"
+        "él/ella": "come",
+        "nosotros": "comemos",
+        "vosotros": "coméis",
+        "ellos/ellas": "comen"
       },
       "Preterite": {
         "yo": "comí",
         "tú": "comiste", 
-        "él/ella": "comió"
+        "él/ella": "comió",
+        "nosotros": "comimos",
+        "vosotros": "comisteis",
+        "ellos/ellas": "comieron"
       }
     }
   },
@@ -97,12 +47,18 @@
       "Present": {
         "yo": "vivo",
         "tú": "vives",
-        "él/ella": "vive"
+        "él/ella": "vive",
+        "nosotros": "vivimos",
+        "vosotros": "vivís",
+        "ellos/ellas": "viven"
       },
       "Preterite": {
         "yo": "viví",
         "tú": "viviste",
-        "él/ella": "vivió"
+        "él/ella": "vivió",
+        "nosotros": "vivimos",
+        "vosotros": "vivisteis",
+        "ellos/ellas": "vivieron"
       }
     }
   }
