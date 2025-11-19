@@ -1,0 +1,51 @@
+name: Deploy Preview branch before merging
+
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  deploy-preview:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Get branch name
+        id: branch-name
+        run: |
+          # Clean branch name for URL (replace / with -)
+          BRANCH_NAME="${GITHUB_REF#refs/heads/}"
+          CLEAN_BRANCH=$(echo "$BRANCH_NAME" | sed 's/\//-/g')
+          echo "branch=$CLEAN_BRANCH" >> $GITHUB_OUTPUT
+          echo "original=$BRANCH_NAME" >> $GITHUB_OUTPUT
+      
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./
+          destination_dir: preview/${{ steps.branch-name.outputs.branch }}
+          keep_files: true
+      
+      - name: Comment PR with preview URL
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const branchName = '${{ steps.branch-name.outputs.branch }}';
+            const previewUrl = `https://yunaimatsu.github.io/languer/preview/${branchName}/`;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `🚀 **Preview deployed!**\n\n📎 **Preview URL:** ${previewUrl}\n\n_Branch: \`${{ steps.branch-name.outputs.original }}\`_`
+            });
