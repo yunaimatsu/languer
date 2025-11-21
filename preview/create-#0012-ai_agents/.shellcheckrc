@@ -1,0 +1,15 @@
+# ShellCheck configuration file
+# https://www.shellcheck.net/wiki/
+
+# Disable specific warnings (optional)
+# disable=SC1090 # Can't follow non-constant source
+# disable=SC2034 # Unused variables
+
+# Enable all optional checks
+enable=all
+
+# Shell dialect (bash, sh, dash, ksh)
+shell=bash
+
+# Severity level: error, warning, info, style
+# severity=warning
