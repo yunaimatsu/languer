@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192">
+  <defs>
+    <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4a90e2;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#357abd;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background with rounded corners -->
+  <rect width="192" height="192" rx="32" fill="url(#grad2)"/>
+
+  <!-- Book/Language Symbol (centered and scaled) -->
+  <g transform="translate(40, 48)">
+    <!-- Open Book Left Page -->
+    <path d="M 0 20 Q 0 10 10 10 L 46 10 Q 56 10 56 20 L 56 86 Q 56 96 46 96 L 10 96 Q 0 96 0 86 Z"
+          fill="#ffffff" opacity="0.95"/>
+
+    <!-- Open Book Right Page -->
+    <path d="M 56 20 Q 56 10 66 10 L 102 10 Q 112 10 112 20 L 112 86 Q 112 96 102 96 L 66 96 Q 56 96 56 86 Z"
+          fill="#ffffff" opacity="0.95"/>
+
+    <!-- Book spine/center -->
+    <line x1="56" y1="20" x2="56" y2="96" stroke="#357abd" stroke-width="3" stroke-linecap="round"/>
+
+    <!-- Decorative page lines (left page) -->
+    <line x1="8" y1="35" x2="48" y2="35" stroke="#e0e0e0" stroke-width="2" opacity="0.5"/>
+    <line x1="8" y1="50" x2="48" y2="50" stroke="#e0e0e0" stroke-width="2" opacity="0.5"/>
+    <line x1="8" y1="65" x2="48" y2="65" stroke="#e0e0e0" stroke-width="2" opacity="0.5"/>
+
+    <!-- Decorative page lines (right page) -->
+    <line x1="64" y1="35" x2="104" y2="35" stroke="#e0e0e0" stroke-width="2" opacity="0.5"/>
+    <line x1="64" y1="50" x2="104" y2="50" stroke="#e0e0e0" stroke-width="2" opacity="0.5"/>
+    <line x1="64" y1="65" x2="104" y2="65" stroke="#e0e0e0" stroke-width="2" opacity="0.5"/>
+
+    <!-- Letter A (left page) -->
+    <text x="28" y="60" font-family="Arial, sans-serif" font-size="36" font-weight="bold"
+          fill="#4a90e2" text-anchor="middle">A</text>
+
+    <!-- Letter あ (Hiragana) (right page) -->
+    <text x="84" y="60" font-family="Arial, sans-serif" font-size="32" font-weight="bold"
+          fill="#4a90e2" text-anchor="middle">あ</text>
+  </g>
+
+  <!-- Globe/World Symbol at bottom -->
+  <g transform="translate(96, 140)">
+    <circle cx="0" cy="0" r="16" fill="#ffffff" opacity="0.3"/>
+    <circle cx="0" cy="0" r="16" fill="none" stroke="#ffffff" stroke-width="2"/>
+    <ellipse cx="0" cy="0" rx="6" ry="16" fill="none" stroke="#ffffff" stroke-width="1.5"/>
+    <line x1="-16" y1="0" x2="16" y2="0" stroke="#ffffff" stroke-width="1.5"/>
+  </g>
+</svg>
