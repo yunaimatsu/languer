@@ -1,11 +1,15 @@
-const CACHE_NAME = 'languer-v1';
+const CACHE_NAME = 'languer-v2';
 const urlsToCache = [
   '/',
   '/index.html',
   '/style.css',
   '/app.js',
   '/words.json',
-  '/conjugations.json'
+  '/conjugations.json',
+  '/manifest.json',
+  '/icons/icon-72x72.png',
+  '/icons/icon-192x192.png',
+  '/icons/icon-512x512.png'
 ];
 
 // Install event - cache resources
