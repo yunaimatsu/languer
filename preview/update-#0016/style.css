@@ -1,0 +1,50 @@
+body {
+  font-family: sans-serif;
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 20px;
+  text-align: center;
+}
+#text-display {
+  font-size: 2rem;
+  margin: 20px 0;
+}
+#input {
+  width: 100%;
+  font-size: 1.2rem;
+  padding: 10px;
+}
+#status {
+  margin-bottom: 20px;
+  font-size: 1.2rem;
+}
+#result, #conj-result {
+  font-size: 1.3rem;
+  margin-top: 20px;
+}
+.success {
+  color: green;
+}
+.error {
+  color: red;
+}
+button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  margin: 10px;
+  cursor: pointer;
+}
+table {
+  margin: 0 auto;
+  border-collapse: collapse;
+  font-size: 1.2rem;
+}
+td, th {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+}
+input[name] {
+  font-size: 1.1rem;
+  padding: 5px;
+  width: 150px;
+}

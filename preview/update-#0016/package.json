@@ -1,0 +1,36 @@
+{
+  "name": "languer",
+  "version": "1.0.0",
+  "description": "Language learning tool for vocabulary and conjugation practice",
+  "main": "index.html",
+  "scripts": {
+    "lint": "npm run lint:js && npm run lint:css && npm run lint:yaml && npm run lint:shell",
+    "lint:js": "eslint *.html",
+    "lint:css": "stylelint '*.css'",
+    "lint:yaml": "yamllint .",
+    "lint:shell": "shellcheck scripts/*.sh",
+    "format": "prettier --write '**/*.{html,css,js,json,yml,yaml,md}'",
+    "format:check": "prettier --check '**/*.{html,css,js,json,yml,yaml,md}'",
+    "fix": "npm run fix:js && npm run fix:css && npm run format",
+    "fix:js": "eslint --fix *.html",
+    "fix:css": "stylelint --fix '*.css'"
+  },
+  "keywords": [
+    "language-learning",
+    "vocabulary",
+    "conjugation",
+    "education"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "prettier": "^3.2.5",
+    "stylelint": "^16.2.1",
+    "stylelint-config-standard": "^36.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yunaimatsu/languer.git"
+  }
+}
